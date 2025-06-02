@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
 import ttkbootstrap as tb
+from ttkbootstrap.constants import *
 
+from password_manager import PasswordManager
+from password_generator import generar_contraseña
 import os
-from src.password_manager import PasswordManager
-from src.password_generator import generar_contraseña
-
 
 class PasswordManagerGUI:
     def __init__(self, root):
@@ -14,18 +14,14 @@ class PasswordManagerGUI:
         self.root.geometry("700x520")
         self.pm = PasswordManager()
 
-        # Establecer ícono si existe
-        icon_path = os.path.join("../assets", "icono.ico")
+        # Establecer icono si existe
+        icon_path = os.path.join("assets", "icono.ico")
         if os.path.exists(icon_path):
             self.root.iconbitmap(icon_path)
 
-        # Fuente global
         self.root.option_add("*Font", ("Segoe UI", 11))
-
-        # Tema inicial
         self.tema_actual = "flatly"
 
-        # ============ Sección Superior: Botones globales ============
         top_frame = tb.Frame(root, padding=10)
         top_frame.pack(fill="x")
 
@@ -35,8 +31,7 @@ class PasswordManagerGUI:
         self.btn_limpiar = tb.Button(top_frame, text="🧹 Limpiar Campos", bootstyle="warning", command=self.limpiar_campos)
         self.btn_limpiar.pack(side="right", padx=5)
 
-        # ============ Sección: Entrada de nueva contraseña ============
-        frame_datos = tb.LabelFrame(root, text="📝 Nueva Entrada", padding=15)
+        frame_datos = tb.LabelFrame(root, text="📜 Nueva Entrada", padding=15)
         frame_datos.pack(fill="x", padx=15, pady=10)
 
         tb.Label(frame_datos, text="Etiqueta:").grid(row=0, column=0, padx=5, pady=5, sticky="w")
@@ -56,13 +51,11 @@ class PasswordManagerGUI:
         self.btn_guardar = tb.Button(frame_datos, text="💾 Guardar", bootstyle="success", command=self.guardar_contraseña)
         self.btn_guardar.grid(row=2, column=1, columnspan=2, pady=10)
 
-        # ============ Sección: Lista de contraseñas ============
         frame_lista = tb.LabelFrame(root, text="🔐 Contraseñas Guardadas", padding=15)
         frame_lista.pack(fill="both", expand=True, padx=15, pady=10)
 
         self.listbox_etiquetas = tk.Listbox(frame_lista, height=10, width=40, font=("Segoe UI", 10))
         self.listbox_etiquetas.pack(side="left", fill="both", expand=True, padx=(0, 10))
-        self.listbox_etiquetas.bind("<<ListboxSelect>>", self.mostrar_contraseña)
 
         botones_frame = tb.Frame(frame_lista)
         botones_frame.pack(side="right", fill="y")
@@ -73,14 +66,10 @@ class PasswordManagerGUI:
         self.btn_mostrar_contraseña = tb.Button(botones_frame, text="👁️ Ver", bootstyle="info", command=self.mostrar_contraseña_manual)
         self.btn_mostrar_contraseña.pack(fill="x", pady=5)
 
-        # ============ Barra de estado ============
         self.status_label = tb.Label(root, text="Bienvenido al gestor de contraseñas", anchor="w", relief="sunken")
         self.status_label.pack(fill="x", padx=15, pady=(0, 10))
 
-        # ============ Cargar etiquetas ============
         self.cargar_etiquetas()
-
-    # =================== FUNCIONES ===================
 
     def toggle_password(self):
         if self.entry_contraseña.cget("show") == "":
@@ -122,15 +111,42 @@ class PasswordManagerGUI:
         for etiqueta in self.pm.listar_etiquetas():
             self.listbox_etiquetas.insert("end", etiqueta)
 
-    def mostrar_contraseña(self, event):
-        self.mostrar_contraseña_manual()
-
     def mostrar_contraseña_manual(self):
         seleccion = self.listbox_etiquetas.curselection()
         if seleccion:
             etiqueta = self.listbox_etiquetas.get(seleccion)
             contraseña = self.pm.obtener_password(etiqueta)
-            messagebox.showinfo(f"Contraseña para '{etiqueta}'", contraseña)
+            self.mostrar_contraseña_modal(etiqueta, contraseña)
+
+    def mostrar_contraseña_modal(self, etiqueta, contraseña):
+        ventana = tb.Toplevel(self.root)
+        ventana.title("🔐 Ver Contraseña")
+        ventana.geometry("400x200")
+        ventana.resizable(False, False)
+        ventana.grab_set()
+
+        contenedor = tb.Frame(ventana, padding=20)
+        contenedor.pack(expand=True, fill="both")
+
+        tb.Label(contenedor, text="Etiqueta", font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        tb.Label(contenedor, text=etiqueta, font=("Segoe UI", 11)).pack(anchor="w", pady=(0, 10))
+
+        tb.Label(contenedor, text="Contraseña", font=("Segoe UI", 10, "bold")).pack(anchor="w")
+        frame_pw = tb.Frame(contenedor)
+        frame_pw.pack(fill="x", pady=5)
+
+        entry_pw = tb.Entry(frame_pw, font=("Segoe UI", 11), width=30)
+        entry_pw.insert(0, contraseña)
+        entry_pw.config(state="readonly")
+        entry_pw.pack(side="left", fill="x", expand=True, padx=(0, 5))
+
+        def copiar():
+            self.root.clipboard_clear()
+            self.root.clipboard_append(contraseña)
+            self.status_label.config(text=f"Contraseña copiada al portapapeles 📋")
+
+        tb.Button(frame_pw, text="📋", width=5, bootstyle="info", command=copiar).pack(side="right")
+        tb.Button(contenedor, text="Cerrar", bootstyle="secondary", command=ventana.destroy).pack(pady=15)
 
     def eliminar_contraseña(self):
         seleccion = self.listbox_etiquetas.curselection()
@@ -139,8 +155,7 @@ class PasswordManagerGUI:
             if messagebox.askyesno("Confirmar", f"¿Seguro que deseas eliminar '{etiqueta}'?"):
                 self.pm.eliminar_password(etiqueta)
                 self.cargar_etiquetas()
-                self.status_label.config(text=f"'{etiqueta}' ha sido eliminada 🗑️")
-
+                self.status_label.config(text=f"'{etiqueta}' ha sido eliminada 🖑")
 
 if __name__ == "__main__":
     app = PasswordManagerGUI(tb.Window(themename="flatly"))

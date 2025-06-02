@@ -1,37 +1,37 @@
-# Módulo para cifrar y descifrar
+import os
 from cryptography.fernet import Fernet
 
-# Generar y guardar una clave segura la primera vez
+# === RUTAS SEGURAS ===
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+KEY_PATH = os.path.join(DATA_DIR, "key.key")
+
+# === GENERAR CLAVE SI NO EXISTE ===
 def generar_clave():
-    clave = Fernet.generate_key()
-    with open("../data/key.key", "wb") as archivo_clave:
-        archivo_clave.write(clave)
-    return clave
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
+    if not os.path.exists(KEY_PATH):
+        clave = Fernet.generate_key()
+        with open(KEY_PATH, "wb") as f:
+            f.write(clave)
+        return clave
+    return cargar_clave()
 
-# Cargar clave desde archivo
+# === CARGAR CLAVE ===
 def cargar_clave():
-    return open("../data/key.key", "rb").read()
+    return open(KEY_PATH, "rb").read()
 
-# Función para cifrar texto
+# === CIFRAR TEXTO ===
 def cifrar(texto, clave):
-    f = Fernet(clave)
-    texto_cifrado = f.encrypt(texto.encode())
-    return texto_cifrado
+    return Fernet(clave).encrypt(texto.encode())
 
-# Función para descifrar texto
+# === DESCIFRAR TEXTO ===
 def descifrar(texto_cifrado, clave):
-    f = Fernet(clave)
-    texto_descifrado = f.decrypt(texto_cifrado).decode()
-    return texto_descifrado
+    return Fernet(clave).decrypt(texto_cifrado).decode()
 
-# Ejemplo de uso rápido
+# === TEST RÁPIDO ===
 if __name__ == "__main__":
-    try:
-        clave = cargar_clave()
-    except FileNotFoundError:
-        clave = generar_clave()
-        print("Clave generada y guardada en data/key.key")
-
+    clave = generar_clave()
     texto_original = "contraseña_segura"
     texto_cifrado = cifrar(texto_original, clave)
     print("Texto cifrado:", texto_cifrado)

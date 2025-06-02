@@ -1,8 +1,6 @@
-#Archivo principal donde estará el código principal
-from tkinter import Tk
-from gui import PasswordManagerGUI
+from src.gui import PasswordManagerGUI
+import ttkbootstrap as tb
 
 if __name__ == "__main__":
-    root = Tk()
-    app = PasswordManagerGUI(root)
-    root.mainloop()
+    app = PasswordManagerGUI(tb.Window(themename="flatly"))
+    app.root.mainloop()
