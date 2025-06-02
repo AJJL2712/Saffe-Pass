@@ -4,13 +4,13 @@ from cryptography.fernet import Fernet
 # Generar y guardar una clave segura la primera vez
 def generar_clave():
     clave = Fernet.generate_key()
-    with open("data/key.key", "wb") as archivo_clave:
+    with open("../data/key.key", "wb") as archivo_clave:
         archivo_clave.write(clave)
     return clave
 
 # Cargar clave desde archivo
 def cargar_clave():
-    return open("data/key.key", "rb").read()
+    return open("../data/key.key", "rb").read()
 
 # Función para cifrar texto
 def cifrar(texto, clave):
