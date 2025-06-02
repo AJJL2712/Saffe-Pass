@@ -1,2 +1,9 @@
-# Saffe-Pass
-Proyecto de gestor de contraseñas con generación segura y cifrado.
+Saffe-Pass: Generador y Gestor de Contraseñas
+
+Generación de contraseñas seguras.
+
+Almacenamiento cifrado de contraseñas.
+
+Recuperación y eliminación de contraseñas.
+
+Interfaz gráfica intuitiva.
