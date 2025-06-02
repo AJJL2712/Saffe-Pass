@@ -1,28 +1,90 @@
-# 🔐 Saffe-Pass — Gestor de Contraseñas Profesional
+# 🔐 SaffePass - Gestor de Contraseñas Profesional
 
-![Saffe-Pass Banner](https://fakeurl.com/banner.png)
+SaffePass es una aplicación de escritorio desarrollada en Python con interfaz moderna gracias a `ttkbootstrap`. Permite gestionar contraseñas de manera segura, visual y eficiente. Ideal para quienes buscan aprender o mostrar habilidades profesionales en interfaces gráficas con Python.
 
-Saffe-Pass es una aplicación de escritorio segura y moderna, desarrollada en Python con `Tkinter` y `ttkbootstrap`, que permite generar, guardar y gestionar contraseñas de forma eficiente. Ideal como referencia profesional para desarrolladores que buscan aprender buenas prácticas con interfaces gráficas en Python.
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-____________________________________________________________________________________________________________________________________________________________________
+📅 Características
 
-🧩 Características
+* ✅ Interfaz moderna inspirada en Bitwarden
+* 🔐 Almacenamiento cifrado local (Fernet/AES)
+* 🎲 Generador de contraseñas seguras
+* 👁️ Visor profesional en ventana modal
+* 📋 Copiar contraseña al portapapeles
+* 🌚 Modo claro/oscuro
+* 🧹 Botón para limpiar campos
+* 📄 Exportable como `.exe` con icono personalizado
 
-- ✅ Interfaz moderna estilo Bitwarden
-- 🔐 Almacenamiento cifrado con clave local
-- 🎲 Generador de contraseñas seguras
-- 📋 Copiar al portapapeles con un clic
-- 📥 Importar y 📤 Exportar contraseñas (`.json`)
-- 🌗 Modo claro/oscuro
-- 🔍 Buscador en tiempo real
-- 🧹 Limpieza de campos y ventanas modales
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-____________________________________________________________________________________________________________________________________________________________________
+## 📊 Capturas
 
-⚙️ Instalación
+| Interfaz Principal              | Ventana Modal (Contraseña)        |
+| ------------------------------- | --------------------------------- |
+| ![main](assets/screen_main.png) | ![modal](assets/screen_modal.png) |
 
-1. Clona el repositorio:
+> Puedes agregar tus propias capturas de pantalla en `assets/` para mostrarlas aquí.
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+⚙️ Requisitos
+
+* Python 3.10 o superior
+* Windows 10/11 (para ejecutable `.exe`)
+
+Instalar dependencias:
 
 ```bash
-git clone https://github.com/tuusuario/Saffe-Pass.git
-cd Saffe-Pass
+pip install -r requirements.txt
+```
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+## 🔄 Ejecutar desde el código fuente
+
+```bash
+python src/main.py
+```
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+## 💾 Ejecutable (.exe)
+
+Puedes ejecutar directamente:
+
+```
+dist/SaffePass.exe
+```
+
+### 📥 Descargar ejecutable
+
+[Descargar .exe desde Google Drive / GitHub Releases](https://github.com/TU_USUARIO/SaffePass/releases)
+
+> Reemplaza este enlace por el tuyo una vez subido el `.exe`
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+## 👤 Autor
+
+**Alan Jahir**
+Estudiante de Ingeniería en Sistemas de Información
+[LinkedIn](https://linkedin.com/in/alanjahir) | [GitHub](https://github.com/AJJL2712)
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo los términos de la licencia MIT.
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+## 📘 Recursos
+
+* `src/gui.py` - Interfaz principal con ttkbootstrap
+* `src/password_manager.py` - Lógica de almacenamiento cifrado
+* `src/encryption.py` - Módulo de cifrado Fernet (clave local)
+* `src/password_generator.py` - Contraseñas aleatorias seguras
+
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+> Proyecto realizado como ejemplo profesional de app de escritorio en Python 🚀
