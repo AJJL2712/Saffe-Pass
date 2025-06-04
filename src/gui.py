@@ -2,19 +2,21 @@ import tkinter as tk
 from tkinter import messagebox
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
+import os
 
 from password_manager import PasswordManager
 from password_generator import generar_contraseña
-import os
+from src.database_service import guardar_contraseña, leer_contraseñas
+from src.firebase_init import db
 
 class PasswordManagerGUI:
-    def __init__(self, root):
+    def __init__(self, root, uid):
         self.root = root
+        self.uid = uid
         self.root.title("🔐 Gestor de Contraseñas")
         self.root.geometry("700x520")
         self.pm = PasswordManager()
 
-        # Establecer icono si existe
         icon_path = os.path.join("assets", "icono.ico")
         if os.path.exists(icon_path):
             self.root.iconbitmap(icon_path)
@@ -22,14 +24,27 @@ class PasswordManagerGUI:
         self.root.option_add("*Font", ("Segoe UI", 11))
         self.tema_actual = "flatly"
 
-        top_frame = tb.Frame(root, padding=10)
-        top_frame.pack(fill="x")
-
-        self.btn_tema = tb.Button(top_frame, text="🌗 Tema Oscuro", bootstyle="secondary", command=self.toggle_tema)
+        # Panel de bienvenida
+        self.panel_usuario = tb.Frame(self.root, padding=10)
+        self.panel_usuario.pack(fill="x")
+        self.label_bienvenida = tb.Label(self.panel_usuario, text="Bienvenido", font=("Segoe UI", 12, "bold"))
+        self.label_bienvenida.pack(side="left")
+        self.label_correo = tb.Label(self.panel_usuario, text=self.uid, font=("Segoe UI", 10))
+        self.label_correo.pack(side="left", padx=10)
+        self.btn_tema = tb.Button(self.panel_usuario, text="🌗 Tema Oscuro", bootstyle="secondary", command=self.toggle_tema)
         self.btn_tema.pack(side="right", padx=5)
+        self.btn_logout = tb.Button(self.panel_usuario, text="Cerrar sesión", bootstyle="danger", command=self.root.destroy)
+        self.btn_logout.pack(side="right")
 
-        self.btn_limpiar = tb.Button(top_frame, text="🧹 Limpiar Campos", bootstyle="warning", command=self.limpiar_campos)
-        self.btn_limpiar.pack(side="right", padx=5)
+        # Cargar nombre desde Firestore
+        try:
+            doc = db.collection("usuarios").document(self.uid).get()
+            if doc.exists:
+                datos = doc.to_dict()
+                nombre = datos.get("nombre", "Usuario")
+                self.label_bienvenida.config(text=f"Bienvenido {nombre}")
+        except:
+            pass
 
         frame_datos = tb.LabelFrame(root, text="📜 Nueva Entrada", padding=15)
         frame_datos.pack(fill="x", padx=15, pady=10)
@@ -83,11 +98,6 @@ class PasswordManagerGUI:
         self.tema_actual = nuevo
         self.btn_tema.config(text="🌞 Tema Claro" if nuevo == "darkly" else "🌗 Tema Oscuro")
 
-    def limpiar_campos(self):
-        self.entry_etiqueta.delete(0, "end")
-        self.entry_contraseña.delete(0, "end")
-        self.status_label.config(text="Campos limpiados 🧹")
-
     def generar_contraseña(self):
         contraseña = generar_contraseña()
         self.entry_contraseña.delete(0, "end")
@@ -100,23 +110,27 @@ class PasswordManagerGUI:
         if not etiqueta or not contraseña:
             messagebox.showerror("Error", "Por favor, llena todos los campos.")
             return
-        self.pm.agregar_password(etiqueta, contraseña)
-        self.cargar_etiquetas()
+        guardar_contraseña(self.uid, etiqueta, self.uid, contraseña)
         self.entry_etiqueta.delete(0, "end")
         self.entry_contraseña.delete(0, "end")
         self.status_label.config(text=f"Contraseña guardada para '{etiqueta}' ✅")
+        self.cargar_etiquetas()
 
     def cargar_etiquetas(self):
         self.listbox_etiquetas.delete(0, "end")
-        for etiqueta in self.pm.listar_etiquetas():
+        contraseñas = leer_contraseñas(self.uid)
+        for etiqueta in contraseñas:
             self.listbox_etiquetas.insert("end", etiqueta)
 
     def mostrar_contraseña_manual(self):
         seleccion = self.listbox_etiquetas.curselection()
         if seleccion:
             etiqueta = self.listbox_etiquetas.get(seleccion)
-            contraseña = self.pm.obtener_password(etiqueta)
-            self.mostrar_contraseña_modal(etiqueta, contraseña)
+            contraseñas = leer_contraseñas(self.uid)
+            datos = contraseñas.get(etiqueta)
+            if datos:
+                contraseña = datos.get("contrasena")
+                self.mostrar_contraseña_modal(etiqueta, contraseña)
 
     def mostrar_contraseña_modal(self, etiqueta, contraseña):
         ventana = tb.Toplevel(self.root)
@@ -153,10 +167,8 @@ class PasswordManagerGUI:
         if seleccion:
             etiqueta = self.listbox_etiquetas.get(seleccion)
             if messagebox.askyesno("Confirmar", f"¿Seguro que deseas eliminar '{etiqueta}'?"):
-                self.pm.eliminar_password(etiqueta)
+                contraseñas = leer_contraseñas(self.uid)
+                doc_ref = db.collection('usuarios').document(self.uid).collection('passwords').document(etiqueta)
+                doc_ref.delete()
                 self.cargar_etiquetas()
-                self.status_label.config(text=f"'{etiqueta}' ha sido eliminada 🖑")
-
-if __name__ == "__main__":
-    app = PasswordManagerGUI(tb.Window(themename="flatly"))
-    app.root.mainloop()
+                self.status_label.config(text=f"'{etiqueta}' ha sido eliminada 🗑️")

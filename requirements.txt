@@ -1,2 +1,4 @@
 # Librerías externas necesarias
+firebase-admin
 cryptography
+ttkbootstrap
