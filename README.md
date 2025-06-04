@@ -62,12 +62,11 @@ dist/SaffePass.exe
 
 ---
 
-👤 Autor
+👤 **Autor**
 
-**Alan Jahir**
-Estudiante de Ingeniería en Sistemas de Información
-[LinkedIn]([https://linkedin.com/in/alanjahir](https://www.linkedin.com/in/alan-jumbo-l%C3%B3pez-566a91213/)) 
-[GitHub](https://github.com/AJJL2712)
+**Alan Jahir**  
+Estudiante de Ingeniería en Sistemas de Información  
+[🔗 LinkedIn](https://www.linkedin.com/in/alan-jumbo-l%C3%B3pez-566a91213/) | [💻 GitHub](https://github.com/AJJL2712)
 
 ---
 
