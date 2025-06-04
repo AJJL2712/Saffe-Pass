@@ -57,7 +57,8 @@ dist/SaffePass.exe
 
 📥 Descargar ejecutable
 
-[[Descargar .exe desde Google Drive](https://drive.google.com/file/d/1uZ7aAyytJftUmjK3hm3FtGKzpNUU45jx/view?usp=drive_link) / GitHub Releases]([https://github.com/AJJL2712/SaffePass/releases](https://github.com/AJJL2712/Saffe-Pass/releases/tag/v1.0.0))
+Google Drive [[Descargar .exe desde Google Drive](https://drive.google.com/file/d/1uZ7aAyytJftUmjK3hm3FtGKzpNUU45jx/view?usp=drive_link) 
+GitHub Releases]([https://github.com/AJJL2712/SaffePass/releases](https://github.com/AJJL2712/Saffe-Pass/releases/tag/v1.0.0))
 
 > Reemplaza este enlace por el tuyo una vez subido el `.exe`
 
