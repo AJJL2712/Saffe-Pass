@@ -1,2 +1,30 @@
 # Ignora la configuración de PyCharm
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# --- Claves y archivos sensibles ---
+data/key.key
+data/passwords.json
+firebase_config.json
+.env
+
+# --- PyInstaller ---
+build/
+dist/
+*.spec
+
+# --- Logs ---
+*.log
+
+# --- Archivos del sistema ---
+.DS_Store
+Thumbs.db
+
+# --- Archivos de usuario (PyCharm, VSCode, etc.) ---
+.vscode/
 .idea/
+
+
