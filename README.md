@@ -56,7 +56,7 @@ dist/SaffePass.exe
 
 📥 Descargar ejecutable
 
-[Descargar .exe desde Google Drive / GitHub Releases](https://github.com/TU_USUARIO/SaffePass/releases)
+[[Descargar .exe desde Google Drive](https://drive.google.com/file/d/1uZ7aAyytJftUmjK3hm3FtGKzpNUU45jx/view?usp=drive_link) / GitHub Releases]([https://github.com/AJJL2712/SaffePass/releases](https://github.com/AJJL2712/Saffe-Pass/releases/tag/v1.0.0))
 
 > Reemplaza este enlace por el tuyo una vez subido el `.exe`
 
@@ -66,7 +66,7 @@ ________________________________________________________________________________
 
 **Alan Jahir**
 Estudiante de Ingeniería en Sistemas de Información
-[LinkedIn](https://linkedin.com/in/alanjahir) | [GitHub](https://github.com/AJJL2712)
+[LinkedIn]([https://linkedin.com/in/alanjahir](https://www.linkedin.com/in/alan-jumbo-l%C3%B3pez-566a91213/)) | [GitHub](https://github.com/AJJL2712)
 
 _____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
